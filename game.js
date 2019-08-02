@@ -19,15 +19,17 @@ function initialize(){
 }
 
 function createRandom(){
+    var emptylColumArr =[];
     data.forEach(function(columData,i){
         columData.forEach(function(rowData,j){
-            if(rowData > 0){
-                table.children[i].children[j].textContent = rowData;
-            }else{
-                table.children[i].children[j].textContent = '';
-            }
+          if(!rowData){
+              emptylColumArr.push([i,j]);
+          }
         });
     });
+    console.log(emptylColumArr);
+    var randomColum = emptylColumArr[Math.floor(Math.random() * emptylColumArr.length)] ;
+    data[randomColum[0]][randomColum[1]] = 2;
     draw();   
 }
 
