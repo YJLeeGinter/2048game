@@ -48,3 +48,45 @@ function draw(){
 initialize();
 createRandom();
 draw();
+
+var dragStart = false;
+var draging = false;
+var startCoordinate;
+var endCoordinate;
+
+window.addEventListener('mousedown', function(event){
+    this.console.log('mousedown', event);
+    dragStart = true;
+    startCoordinate = [event.clientX, event.clientY];
+
+} );
+
+window.addEventListener('mousemove', function(event){
+    if(dragStart){
+        this.console.log('mousemove', event);
+        draging = true;
+    }
+
+} );
+
+window.addEventListener('mouseup', function(event){
+    this.console.log('mouseup', event);
+    dragStart = false;
+    endCoordinate = [event.clientX, event.clientY];
+    if(draging){
+        
+    }
+    var direction;
+    var xDifference = endCoordinate[0] - startCoordinate[0];
+    var yDifference = endCoordinate[1] - startCoordinate[1];
+    if(xDifference < 0  && Math.abs(xDifference)/ Math.abs(yDifference)> 1){
+        direction = 'left';
+    }else if(xDifference > 0  && Math.abs(xDifference)/ Math.abs(yDifference)>1){
+        direction = 'right';
+    }else if(yDifference > 0  && Math.abs(xDifference)/ Math.abs(yDifference)<1){
+        direction = 'down';
+    }else if(yDifference < 0  && Math.abs(xDifference)/ Math.abs(yDifference)<1) {
+        direction = 'up';
+    }
+    this.console.log(xDifference, yDifference, direction);
+} );
