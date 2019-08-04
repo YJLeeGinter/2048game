@@ -74,19 +74,113 @@ window.addEventListener('mouseup', function(event){
     dragStart = false;
     endCoordinate = [event.clientX, event.clientY];
     if(draging){
-        
+        var direction;
+        var xDifference = endCoordinate[0] - startCoordinate[0];
+        var yDifference = endCoordinate[1] - startCoordinate[1];
+        if(xDifference < 0  && Math.abs(xDifference)/ Math.abs(yDifference)> 1){
+            direction = 'left';
+        }else if(xDifference > 0  && Math.abs(xDifference)/ Math.abs(yDifference)>1){
+            direction = 'right';
+        }else if(yDifference > 0  && Math.abs(xDifference)/ Math.abs(yDifference)<1){
+            direction = 'down';
+        }else if(yDifference < 0  && Math.abs(xDifference)/ Math.abs(yDifference)<1) {
+            direction = 'up';
+        }
     }
-    var direction;
-    var xDifference = endCoordinate[0] - startCoordinate[0];
-    var yDifference = endCoordinate[1] - startCoordinate[1];
-    if(xDifference < 0  && Math.abs(xDifference)/ Math.abs(yDifference)> 1){
-        direction = 'left';
-    }else if(xDifference > 0  && Math.abs(xDifference)/ Math.abs(yDifference)>1){
-        direction = 'right';
-    }else if(yDifference > 0  && Math.abs(xDifference)/ Math.abs(yDifference)<1){
-        direction = 'down';
-    }else if(yDifference < 0  && Math.abs(xDifference)/ Math.abs(yDifference)<1) {
-        direction = 'up';
-    }
+   
+    dragStart = false;
+    draging = false;
     this.console.log(xDifference, yDifference, direction);
+
+    switch(direction){
+        case 'left': 
+        var newData = [
+            [],
+            [],
+            [],
+            []
+        ];
+            data.forEach(function(columData,i){
+                columData.forEach(function(rowData,j){
+                  if(rowData){
+                      if(newData[newData.length - 1] && newData[newData.length - 1] === rowData ){
+                        newData[newData.length - 1] *=2;
+                    } 
+                } else{
+                    newData[i].push(rowData);
+                }
+                });
+            });
+     this.console.log(newData);
+     [1,2,3,4].forEach(function(columData,i){
+         [1,2,3,4].forEach(function(rowData,j){
+            data[i][j] = newData[i][j] || 0;
+         })
+     }) 
+        break;  
+        case 'right':
+             var newData = [
+                    [],
+                    [],
+                    [],
+                    []
+                ];
+                    data.forEach(function(columData,i){
+                        columData.forEach(function(rowData,j){
+                          if(rowData){
+                           newData[i].unshift(rowData);
+                        }
+                        });
+                    });
+             this.console.log(newData);
+             [1,2,3,4].forEach(function(columData,i){
+                 [1,2,3,4].forEach(function(rowData,j){
+                    data[i][3-j] = newData[i][j] || 0;
+                 })
+             }) 
+        break;
+        case 'up':
+            var newData = [
+                [],
+                [],
+                [],
+                []
+            ];
+                data.forEach(function(columData,i){
+                    columData.forEach(function(rowData,j){
+                      if(rowData){
+                       newData[j].push(rowData);
+                    }
+                    });
+                });
+         this.console.log(newData);
+         [1,2,3,4].forEach(function(rowData,i){
+             [1,2,3,4].forEach(function(columData,j){
+                data[j][i] = newData[i][j] || 0;
+             })
+         })       
+        break;
+        case 'down':
+                var newData = [
+                    [],
+                    [],
+                    [],
+                    []
+                ];
+                    data.forEach(function(columData,i){
+                        columData.forEach(function(rowData,j){
+                          if(rowData){
+                           newData[j].unshift(rowData);
+                        }
+                        });
+                    });
+             this.console.log(newData);
+             [1,2,3,4].forEach(function(rowData,i){
+                 [1,2,3,4].forEach(function(columData,j){
+                    data[3-j][i] = newData[i][j] || 0;
+                 })
+             }) 
+        break;
+    }
+     createRandom();
 } );
