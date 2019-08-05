@@ -1,5 +1,6 @@
 var table = document.getElementById('table');
 var data = [];
+var scoreChart = document.getElementById('score');
 
 function initialize(){
     var fragment = document.createDocumentFragment();
@@ -27,10 +28,16 @@ function createRandom(){
           }
         });
     });
-    console.log(emptylColumArr);
-    var randomColum = emptylColumArr[Math.floor(Math.random() * emptylColumArr.length)] ;
-    data[randomColum[0]][randomColum[1]] = 2;
-    draw();   
+    if(emptylColumArr.length === 0){
+        alert('Game Over: ' + scoreChart.textContent);
+        table.innerHTML = '';
+        scoreChart.innerHTML = '0';
+        initialize();
+    }else{
+        var randomColum = emptylColumArr[Math.floor(Math.random() * emptylColumArr.length)] ;
+        data[randomColum[0]][randomColum[1]] = 2;
+        draw();  
+    }     
 }
 
 function draw(){
@@ -55,7 +62,6 @@ var startCoordinate;
 var endCoordinate;
 
 window.addEventListener('mousedown', function(event){
-    this.console.log('mousedown', event);
     dragStart = true;
     startCoordinate = [event.clientX, event.clientY];
 
@@ -63,15 +69,12 @@ window.addEventListener('mousedown', function(event){
 
 window.addEventListener('mousemove', function(event){
     if(dragStart){
-        this.console.log('mousemove', event);
         draging = true;
     }
 
 } );
 
 window.addEventListener('mouseup', function(event){
-    this.console.log('mouseup', event);
-    dragStart = false;
     endCoordinate = [event.clientX, event.clientY];
     if(draging){
         var direction;
@@ -90,7 +93,6 @@ window.addEventListener('mouseup', function(event){
    
     dragStart = false;
     draging = false;
-    this.console.log(xDifference, yDifference, direction);
 
     switch(direction){
         case 'left': 
@@ -102,12 +104,15 @@ window.addEventListener('mouseup', function(event){
         ];
             data.forEach(function(columData,i){
                 columData.forEach(function(rowData,j){
-                  if(rowData){
-                      if(newData[newData.length - 1] && newData[newData.length - 1] === rowData ){
-                        newData[newData.length - 1] *=2;
+                  if(rowData)  {
+                      if(newData[i][newData[i].length - 1] && newData[i][newData[i].length - 1] === rowData ){
+                        newData[i][newData[i].length - 1] *=2;
+                     var currentScore = parseInt(scoreChart.textContent, 10); 
+                     scoreChart.textContent = currentScore + newData[i][newData[i].length -1];
                     } 
-                } else{
-                    newData[i].push(rowData);
+                    else{
+                        newData[i].push(rowData);
+                } 
                 }
                 });
             });
@@ -128,7 +133,14 @@ window.addEventListener('mouseup', function(event){
                     data.forEach(function(columData,i){
                         columData.forEach(function(rowData,j){
                           if(rowData){
-                           newData[i].unshift(rowData);
+                            if(newData[i][newData[i].length - 1] && newData[i][newData[i].length - 1] === rowData ){
+                                newData[i][newData[i].length - 1] *=2;
+                             var currentScore = parseInt(scoreChart.textContent, 10); 
+                             scoreChart.textContent = currentScore + newData[i][newData[i].length -1];
+                            } 
+                            else{
+                                newData[i].unshift(rowData);
+                        } 
                         }
                         });
                     });
@@ -148,8 +160,15 @@ window.addEventListener('mouseup', function(event){
             ];
                 data.forEach(function(columData,i){
                     columData.forEach(function(rowData,j){
-                      if(rowData){
-                       newData[j].push(rowData);
+                      if(rowData){                      
+                       if(newData[j][newData[j].length - 1] && newData[j][newData[j].length - 1] === rowData ){
+                        newData[j][newData[j].length - 1] *=2;
+                     var currentScore = parseInt(scoreChart.textContent, 10); 
+                     scoreChart.textContent = currentScore + newData[j][newData[j].length -1];
+                    } 
+                    else{
+                        newData[j].push(rowData);
+                } 
                     }
                     });
                 });
@@ -170,8 +189,14 @@ window.addEventListener('mouseup', function(event){
                     data.forEach(function(columData,i){
                         columData.forEach(function(rowData,j){
                           if(rowData){
-                           newData[j].unshift(rowData);
-                        }
+                            if(newData[j][0] && newData[j][0] === rowData ){
+                                newData[j][0] *=2;
+                             var currentScore = parseInt(scoreChart.textContent, 10); 
+                             scoreChart.textContent = currentScore + newData[j][0];
+                            } 
+                            else{
+                                newData[j].unshift(rowData);
+                        }                         }
                         });
                     });
              this.console.log(newData);
@@ -182,5 +207,6 @@ window.addEventListener('mouseup', function(event){
              }) 
         break;
     }
+    draw();
      createRandom();
 } );
